@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\Factory;
@@ -38,3 +39,20 @@ $departments =[
 
 });
 
+Route::get('tasks' , function(){
+
+return view('tasks');
+
+
+});
+
+Route::post(uri: 'create' , action: function(): Factory|View{
+    $task_name=$_POST['name'];
+  DB::table('tasks')->insert(['name' => $task_name]);
+
+
+  return  view( view:'tasks');
+
+
+
+});
