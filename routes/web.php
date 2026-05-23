@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,20 +41,42 @@ $departments =[
 
 });
 
-Route::get('tasks' , function(){
-
-return view('tasks');
+Route::get(uri:'tasks' , action: function(): Factory|View{
+$tasks =DB::table(table:'tasks')->get();
+return view( view:'tasks',data :compact(var_name:'tasks') );
 
 
 });
 
-Route::post(uri: 'create' , action: function(): Factory|View{
+Route::post(uri: 'create' , action: function(): Redirector|RedirectResponse{
     $task_name=$_POST['name'];
   DB::table('tasks')->insert(['name' => $task_name]);
 
 
-  return  view( view:'tasks');
+return redirect()->back();
 
 
 
+});
+
+
+Route :: post('/delete/{id}',action:function($id): Redirector|RedirectResponse{
+
+DB::table( table:'tasks')->where(column:'id', operator:$id)->delete();
+
+
+
+return redirect()->back();
+});
+Route :: post(uri:'edit/{id}',action:function($id): Factory|View{
+
+ $task = DB::table(table:'tasks')->where(column:'id', operator:$id)->first();
+ $tasks = DB::table(table:'tasks')->get();
+ return view('tasks', compact('task', 'tasks'));
+
+});
+Route::post('update' ,function():Redirector|RedirectResponse{
+$id =$_POST['id'];
+DB::table('tasks')->where('id' ,'=',$id)->update(['name' => $_POST['name']]);
+return redirect(to:'tasks');
 });
