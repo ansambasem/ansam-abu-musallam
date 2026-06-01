@@ -140,3 +140,121 @@
 
 </body>
 </html>
+
+
+
+// استخدام القالب
+{{-- @extends(view:'layouts.app')
+@section(section: 'content')
+
+<div class="container mt-4">
+    <div class="offset-md-2 col-md-8">
+
+        <div class="card">
+            @if (isset($user))
+                <div class="card-header">Update User</div>
+
+                <div class="card-body">
+                    <form action="{{ url('user/update') }}" method="POST">
+                        @csrf
+
+                        <input type="hidden" name="id" value="{{ $user->id }}">
+
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" name="name" class="form-control" value="{{ $user->name }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" value="{{ $user->email }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Password (Leave blank to keep current)</label>
+                            <input type="password" name="password" class="form-control" placeholder="Enter new password if you want to change it">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-refresh me-2"></i>Update User
+                        </button>
+                    </form>
+                </div>
+            @else
+                <div class="card-header">New User</div>
+
+                <div class="card-body">
+                    <form action="user/create" method="POST">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-plus me-2"></i>Add User
+                        </button>
+                    </form>
+                </div>
+            @endif
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">Current Users</div>
+
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    @foreach($users as $user)
+                        <tr>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>
+
+                                <form action="/user/delete/{{ $user->id }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fa fa-trash me-2"></i>Delete
+                                    </button>
+                                </form>
+
+                                <form action="/user/edit/{{ $user->id }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-info">
+                                        <i class="fa fa-info me-2"></i>Edit
+                                    </button>
+                                </form>
+
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@endsection
+ --}}
