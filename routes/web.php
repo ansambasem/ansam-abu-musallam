@@ -7,76 +7,58 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get(uri: '/about' , action: function(): Factory|View{
-$name ='ansam';
+Route::get('/about', function (): Factory|View {
 
-$departments =[
-'01' =>'Tichnical',
-'2' => 'financial',
-'3' => 'Sales'
+    $name = 'ansam';
 
-];
-     //return view( 'about' , ['name' => $name]);
-    //return view( view:'about')->with( key: 'name', value : $name);
-    return view( view:'about' , data: compact('name' , 'departments'));
+    $departments = [
+        '01' => 'Tichnical',
+        '2'  => 'financial',
+        '3'  => 'Sales'
+    ];
 
-});
-Route::post(uri: '/about' , action: function(): Factory|View{
+    // return view('about', ['name' => $name]);
+    // return view('about')->with('name', $name);
 
-$name =$_POST['name'];
-$departments =[
-'01' =>'Tichnical',
-'2' => 'financial',
-'3' => 'Sales'
-
-];
-  return view( view:'about' , data: compact('name'));
-
- //return view( view:'about');
-
+    return view('about', compact('name', 'departments'));
 });
 
-Route::get(uri:'tasks' , action: function(): Factory|View{
-$tasks =DB::table(table:'tasks')->get();
-return view( view:'tasks',data :compact(var_name:'tasks') );
+Route::post('/about', function (): Factory|View {
 
+    $name = $_POST['name'];
 
+    $departments = [
+        '01' => 'Tichnical',
+        '2'  => 'financial',
+        '3'  => 'Sales'
+    ];
+
+    return view('about', compact('name'));
 });
 
-Route::post(uri: 'create' , action: function(): Redirector|RedirectResponse{
-    $task_name=$_POST['name'];
-  DB::table('tasks')->insert(['name' => $task_name]);
+Route::get('tasks', [TaskController::class, 'index']);
 
+Route::post('create', [TaskController::class, 'create']);
 
-return redirect()->back();
+Route::post('/delete/{id}', [TaskController::class, 'destroy']);
 
+Route::post('edit/{id}', [TaskController::class, 'edit']);
 
+Route::post('update', [TaskController::class, 'update']);
 
-});
+Route::get('users', [UserController::class, 'index']);
 
+Route::post('user/create', [UserController::class, 'create']);
 
-Route :: post('/delete/{id}',action:function($id): Redirector|RedirectResponse{
+Route::post('user/delete/{id}', [UserController::class, 'destroy']);
 
-DB::table( table:'tasks')->where(column:'id', operator:$id)->delete();
+Route::post('user/edit/{id}', [UserController::class, 'edit']);
 
-
-
-return redirect()->back();
-});
-Route :: post(uri:'edit/{id}',action:function($id): Factory|View{
-
- $task = DB::table(table:'tasks')->where(column:'id', operator:$id)->first();
- $tasks = DB::table(table:'tasks')->get();
- return view('tasks', compact('task', 'tasks'));
-
-});
-Route::post('update' ,function():Redirector|RedirectResponse{
-$id =$_POST['id'];
-DB::table('tasks')->where('id' ,'=',$id)->update(['name' => $_POST['name']]);
-return redirect(to:'tasks');
-});
+Route::post('user/update', [UserController::class, 'update']);
