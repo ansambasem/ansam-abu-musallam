@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Faker\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,57 +13,52 @@ use Illuminate\Routing\Redirector;
 class UserController extends Controller
 {
 
-public function index(): Factory|View{
+    public function index(): Factory|View
+    {
+        $users = DB::table('users')->get();
 
-$users = DB::table(table:'users')->get();
+        return view('users', compact('users'));
+    }
 
-return view(view:'users', data: compact(var_name:'users'));
+    public function create()
+    {
+        DB::table('users')->insert([
+            'name' => $_POST['name'],
+            'email' => $_POST['email'],
+            'password' => '123456'
+        ]);
 
-}
+        return redirect()->back();
+    }
 
-public function create(){
+    public function destroy($id): Redirector|RedirectResponse
+    {
+        $user = User::find($id);
 
-DB::table('users')->insert([
-    'name' => $_POST['name'],
-    'email' => $_POST['email'],
-    'password' => '123456'
-]);
+        $user->delete();
 
-return redirect()->back();
+        return redirect()->back();
+    }
 
-}
+    public function edit($id): Factory|View
+    {
+        $user = DB::table('users')->where('id', '=', $id)->first();
 
-public function destroy($id): Redirector|RedirectResponse{
+        $users = DB::table('users')->get();
 
-DB::table(table:'users')->where(column:'id', operator:$id)->delete();
+        return view('users', compact('user', 'users'));
+    }
 
-return redirect()->back();
+    public function update(): Redirector|RedirectResponse
+    {
+        $user = User::find($_POST['id']);
 
-}
+        $user->name = $_POST['name'];
+        $user->email = $_POST['email'];
 
-public function edit($id): Factory|View{
+        $user->save();
 
-$user = DB::table(table:'users')->where(column:'id', operator:$id)->first();
-
-$users = DB::table(table:'users')->get();
-
-return view('users', compact('user', 'users'));
-
-}
-
-public function update($id): Redirector|RedirectResponse {
-
-$id = $_POST['id'];
-
-DB::table('users')
-->where('id', '=', $id)
-->update([
-'name' => $_POST['name'],
-'email' => $_POST['email']
-]);
-
-return redirect(to:'users');
-
-}
+        return redirect('users');
+    }
 
 }
