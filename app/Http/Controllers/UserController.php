@@ -20,11 +20,16 @@ class UserController extends Controller
         return view('users', compact('users'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $request->validate([
+            'name' => 'required|min:3|max:20',
+            'email' => 'required|email|unique:users'
+        ]);
+
         DB::table('users')->insert([
-            'name' => $_POST['name'],
-            'email' => $_POST['email'],
+            'name' => $request->name,
+            'email' => $request->email,
             'password' => '123456'
         ]);
 
@@ -49,12 +54,17 @@ class UserController extends Controller
         return view('users', compact('user', 'users'));
     }
 
-    public function update(): Redirector|RedirectResponse
+    public function update(Request $request): Redirector|RedirectResponse
     {
-        $user = User::find($_POST['id']);
+        $request->validate([
+            'name' => 'required|min:3|max:20',
+            'email' => 'required|email'
+        ]);
 
-        $user->name = $_POST['name'];
-        $user->email = $_POST['email'];
+        $user = User::find($request->id);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
 
         $user->save();
 

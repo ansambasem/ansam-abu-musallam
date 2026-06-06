@@ -20,16 +20,18 @@ class TaskController extends Controller
         return view('tasks', compact('tasks'));
     }
 
-    public function create()
-    {
-        $task_name = $_POST['name'];
+    public function create(Request $request)
+{
+    $request->validate([
+        'name' => 'required|max:10'
+    ]);
 
-        DB::table('tasks')->insert([
-            'name' => $task_name
-        ]);
+    DB::table('tasks')->insert([
+        'name' => $request->name
+    ]);
 
-        return redirect()->back();
-    }
+    return redirect()->back();
+}
 
     public function destroy($id): Redirector|RedirectResponse
     {
@@ -49,11 +51,15 @@ class TaskController extends Controller
         return view('tasks', compact('task', 'tasks'));
     }
 
-    public function update(): Redirector|RedirectResponse
+    public function update(Request $request): Redirector|RedirectResponse
     {
-        $task = Task::find($_POST['id']);
+        $request->validate([
+            'name' => 'required|max:10'
+        ]);
 
-        $task->name = $_POST['name'];
+        $task = Task::find($request->id);
+
+        $task->name = $request->name;
 
         $task->save();
 

@@ -69,7 +69,13 @@
 
                         <div class="mb-3">
                             <label class="form-label">Name</label>
-                            <input type="text" name="name" class="form-control" required>
+                            <input type="text" name="name" class="form-control" >
+
+                             @error('name')
+                            <div style="color:red; font-size:14px; margin-top:5px;">
+                            {{ $message }}
+                              </div>
+                             @enderror
                         </div>
 
                         <div class="mb-3">
